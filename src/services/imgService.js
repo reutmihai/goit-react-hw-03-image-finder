@@ -15,15 +15,20 @@ export async function getImages(searchQuery, page = 1, perPage = 12) {
             },
         });
 
+          if (response.data.hits.length === 0) {
+            return []; 
+          }
+
         const images = response.data.hits.map(({ id, webformatURL, largeImageURL }) => ({
             id,
             webformatURL,
             largeImageURL,
         }));
 
+
         return images;
     } catch(error) {
-        console.log(error);
+        console.log('Eroare in imgService:', error);
         throw error;
     }
 };

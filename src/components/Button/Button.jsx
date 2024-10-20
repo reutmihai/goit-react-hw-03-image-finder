@@ -1,7 +1,20 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styles from './Button.module.css'; 
 
-export const Button = () => {
+const Button = ({ onClick, visible }) => {
+  if (!visible) return null; 
+
   return (
-    <div>Button</div>
-  )
-}
+    <button className={styles.Button} onClick={onClick}>
+      Load more
+    </button>
+  );
+};
+
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+};
+
+export default Button;
