@@ -16,7 +16,7 @@ class App extends Component {
   };
 
   render() {
-    const { searchQuery, images } = this.state;
+    const { images } = this.state;
 
     return (
       <div className={styles.App}>
