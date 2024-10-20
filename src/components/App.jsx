@@ -1,27 +1,39 @@
 import React, { Component } from 'react';
 import Searchbar from '../components/Searchbar/Searchbar';
 import ImageGallery from '../components/ImageGallery/ImageGallery';
-import { getImages } from '../services/imgService'; 
+import { getImages } from '../services/imgService';
+import { Loader } from './Loader/Loader';
 import styles from './App.module.css';
 class App extends Component {
   state = {
     searchQuery: '',
+    isLoading: false,
     images: [],
+    error: '',
   };
 
   handleSearchSubmit = async searchQuery => {
-    this.setState({ searchQuery }); 
-    const images = await getImages(searchQuery); 
-    this.setState({ images });
+    try {
+      this.setState({ searchQuery, isLoading: true, error: '' });
+      const images = await getImages(searchQuery);
+      this.setState({ images });
+    } catch (error) {
+      if (error.code) {
+        this.setState({ error: 'N-a fost gasit niciun rezultat.' });
+      }
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
   render() {
-    const { images } = this.state;
+    const { images, error, isLoading } = this.state;
 
     return (
       <div className={styles.App}>
+        {error && <div className={styles.error}>{error}</div>}
         <Searchbar onSubmit={this.handleSearchSubmit} />
-        <ImageGallery images={images} />{' '}
+        <div>{isLoading ? <Loader /> : <ImageGallery images={images} />}</div>
       </div>
     );
   }
